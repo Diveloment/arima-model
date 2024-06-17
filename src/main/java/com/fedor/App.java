@@ -9,6 +9,7 @@ import com.fedor.data.provider.DataProvider;
 import com.fedor.timeseries.arima.Arima;
 import com.fedor.timeseries.arima.struct.ArimaParams;
 import com.fedor.timeseries.arima.struct.ForecastResult;
+import com.fedor.trainer.OptimalParamsFinder;
 import com.fedor.utils.DatasetParam;
 import com.opencsv.exceptions.CsvException;
 
@@ -27,7 +28,7 @@ public class App
         DataProvider dataProvider = new CsvDataProvider("/home/fedor/IdeaProjects/ARIMA/src/main/resources/datasets/rubdollar5y.csv", DollarRubData.class);
 
         double[] dataArray = dataProvider.getData();
-        double[] dataForTest = getFirstPercent(dataArray, 0.75);
+        double[] dataForTest = getFirstPercent(dataArray, 0.45);
 
         int p = 30;
         int d = 0;
@@ -36,10 +37,14 @@ public class App
         int D = 1;
         int Q = 0;
         int m = 0;
-        int forecastSize = 170;
+        int forecastSize = 30;
 
         ArimaParams params = new ArimaParams(p, d, q, P, D, Q, m);
-        ForecastResult forecastResult = Arima.forecast_arima(dataForTest, forecastSize, params);
+
+        OptimalParamsFinder optimalParamsFinder = new OptimalParamsFinder(dataForTest);
+        ArimaParams bestParams = optimalParamsFinder.run(params, 10000);
+
+        ForecastResult forecastResult = Arima.forecast_arima(dataForTest, forecastSize, bestParams);
 
         double[] forecastData = forecastResult.getForecast();
         double[] uppers = forecastResult.getForecastUpperConf();

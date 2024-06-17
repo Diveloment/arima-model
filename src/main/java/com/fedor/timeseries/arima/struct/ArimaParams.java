@@ -9,6 +9,7 @@ package com.fedor.timeseries.arima.struct;
 
 import com.fedor.matrix.InsightsVector;
 import com.fedor.timeseries.timeseriesutil.Integrator;
+import lombok.ToString;
 
 /**
  * Simple wrapper for ARIMA parameters and fitted states
@@ -320,5 +321,18 @@ public final class ArimaParams {
             Integrator.integrate(current, next, init, 1);
             current = next;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ArimaParams{" +
+                "p=" + p +
+                ", d=" + d +
+                ", q=" + q +
+                ", P=" + P +
+                ", D=" + D +
+                ", Q=" + Q +
+                ", m=" + m +
+                '}';
     }
 }
