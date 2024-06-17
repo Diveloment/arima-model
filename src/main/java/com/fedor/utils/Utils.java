@@ -24,4 +24,11 @@ public class Utils {
 
         return resultArray;
     }
+
+    public static double[] getFirstPercent(double[] originalArray, double percent) {
+        int newSize = (int) Math.ceil(originalArray.length * percent);
+        double[] resultArray = Arrays.copyOf(originalArray, newSize);
+
+        return resultArray;
+    }
 }
